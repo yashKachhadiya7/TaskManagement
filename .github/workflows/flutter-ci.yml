@@ -1,0 +1,34 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches:
+      - main  # Runs when code is pushed to the "main" branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "1.0.0+1"  # Replace with your Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test  # Runs unit tests
+
+      - name: Build APK
+        run: flutter build apk --release  # Builds the release APK
+
+      - name: Upload APK as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
